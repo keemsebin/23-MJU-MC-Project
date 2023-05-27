@@ -13,7 +13,7 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Handler().postDelayed({
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, OnBoardingActivity::class.java)
             startActivity(intent)
             finish()
         }, 2000)

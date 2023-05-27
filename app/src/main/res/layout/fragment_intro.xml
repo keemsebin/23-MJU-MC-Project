@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center"
+    >
+    <FrameLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+<!--        <androidx.viewpager2.widget.ViewPager2-->
+<!--            android:id="@+id/viewPager_onBoarding"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:clipChildren="false"-->
+<!--            android:clipToPadding="false"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/onboard_rectangle"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:padding="30dp"-->
+<!--            android:text="@string/introText"-->
+<!--            android:textSize="30sp"-->
+<!--            android:fontFamily="@font/pretendard_bold" />-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/onboard_rectangle"
+            android:padding="30dp"
+            android:text="@string/introText"
+            android:textSize="30sp"
+            android:fontFamily="@font/pretendard_bold" />
+        <TextView
+            android:id="@+id/introtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/introText"
+            android:layout_marginTop="150sp"
+            android:layout_marginLeft="40sp"
+            android:textSize="30sp"
+            android:textColor="#FEFAE0"
+            android:fontFamily="@font/pretendard_medium"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/onboradingimage"
+            android:layout_gravity="right|end"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="20sp"
+            />
+    </FrameLayout>
+</LinearLayout>
