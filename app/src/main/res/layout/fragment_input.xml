@@ -86,7 +86,7 @@
                     android:layout_marginLeft="20sp"
 
                     />
-                <EditText
+                <Button
                     android:id="@+id/timer"
                     android:layout_width="150sp"
                     android:layout_height="40sp"
@@ -95,7 +95,8 @@
                     android:background="@android:color/transparent"
                     android:layout_marginLeft="95sp"
                     android:maxLines="1"
-                    android:ems="9"/>
+                    android:ems="9"
+                    android:hint="터치"/>
             </FrameLayout>
             <FrameLayout
                 android:layout_width="wrap_content"
