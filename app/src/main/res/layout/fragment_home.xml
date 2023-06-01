@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:id="@+id/welcomment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:layout_marginTop="29sp"
+        android:layout_marginLeft="35sp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:text="김세빈님, 하루를 기록해보세요."
+        />
+    <FrameLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:radius="18dp"
+        >
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="#FAFAFA"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="10dp"
+            android:background="@drawable/cardview_background">
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/calendar"
+            android:layout_width="340sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="35sp"
+            android:layout_marginBottom="45sp"
+            app:mcv_selectionColor="#FFE9AC"
+            app:mcv_dateTextAppearance="@style/CalendarStyle"
+            app:mcv_weekDayTextAppearance="@style/CalendarStyle"
+            app:mcv_headerTextAppearance="@style/CalendarStyle"
+            app:mcv_showOtherDates="all" />
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+</LinearLayout>
