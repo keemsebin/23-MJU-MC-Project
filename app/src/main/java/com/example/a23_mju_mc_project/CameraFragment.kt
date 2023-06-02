@@ -1,5 +1,7 @@
 package com.example.a23_mju_mc_project
 
+import WriteFragment
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -8,13 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.annotation.RequiresApi
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.a23_mju_mc_project.databinding.FragmentCameraBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,19 +31,29 @@ import java.util.concurrent.Executors
 class CameraFragment : Fragment() {
     private lateinit var binding: FragmentCameraBinding
     private lateinit var outputDirectory: File
+    private lateinit var previewView: PreviewView
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
-
+    private var isPreviewMode = true
+    private var photoFilePath: String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCameraBinding.inflate(inflater, container, false)
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbarLayout)
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.navigationbar)
+        toolbar.visibility = View.GONE
+        bottomNavigationView.visibility = View.GONE
         return binding.root
     }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+        outState.putBoolean("isPreviewMode", isPreviewMode)
+        outState.putString("photoFilePath", photoFilePath)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -46,9 +61,23 @@ class CameraFragment : Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         binding.cameraCaptureButton.setOnClickListener {
-            takePhoto()
+            if (isPreviewMode) {
+                takePhoto()
+            } else {
+                showToast("Photo Saved")
+                // 이미지 파일 경로를 writefragment에 전달
+                val writeFragment = WriteFragment().apply {
+                    arguments = Bundle().apply {
+                        // 이미지 파일 경로를 WriteFragment에 전달
+                        putString("photoFilePath", photoFilePath)
+                    }
+                }
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.container, writeFragment)
+                    .commit()
+            }
+            switchToSaveMode()
         }
-
         startCamera()
     }
 
@@ -71,6 +100,19 @@ class CameraFragment : Fragment() {
                     val msg = "Photo capture succeeded: $savedUri"
                     showToast(msg)
                     Log.d("CameraX-Debug", msg)
+
+                    val bundle = Bundle()
+                    bundle.putString("photoFilePath", photoFile.absolutePath)
+                    photoFilePath = photoFile.absolutePath
+
+                    val writeFragment = WriteFragment()
+                    writeFragment.arguments = bundle
+
+                    val transaction = parentFragmentManager.beginTransaction()
+                    transaction.replace(R.id.container, writeFragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+
                 }
 
                 override fun onError(exc: ImageCaptureException) {
@@ -129,9 +171,14 @@ class CameraFragment : Fragment() {
             }
         }
     }
-
+    private fun switchToSaveMode() {
+        binding.cameraCaptureButton.setImageResource(R.drawable.check)
+        binding.cameraRefreshButton.setImageResource(R.drawable.cancel)
+        isPreviewMode = false
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         cameraExecutor.shutdown()
     }
+
 }

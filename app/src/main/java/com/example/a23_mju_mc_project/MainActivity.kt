@@ -1,29 +1,23 @@
 package com.example.a23_mju_mc_project
 
-import android.graphics.Color
-import android.graphics.Paint.Style
-import android.graphics.Typeface
+import android.content.Intent
+
 import android.os.Bundle
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
-import android.text.style.StyleSpan
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.a23_mju_mc_project.databinding.ActivityMainBinding
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
+
 
 import java.util.*
 import kotlin.collections.HashSet
 
 class MainActivity : AppCompatActivity() {
     private val fragmentManager = supportFragmentManager
-    private val cameraFragment = CameraFragment();
     private val homeFragment = HomeFragment();
     private val myFragment = MyFragment();
+    private val cameraFragment = CameraFragment();
     lateinit var binding : ActivityMainBinding
     lateinit var bottomNavigationView: BottomNavigationView
 
@@ -55,10 +49,5 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-        val toolbarLayout = binding.toolbarLayout
-        val toolbar = toolbarLayout.findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-
     }
 }

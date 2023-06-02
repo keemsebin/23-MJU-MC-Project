@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 
 
-class FragmentInput: Fragment() {
+class InputFragment: Fragment() {
     lateinit var binding: FragmentInputBinding
     private lateinit var database: MyAppDatabase
     override fun onCreateView(
