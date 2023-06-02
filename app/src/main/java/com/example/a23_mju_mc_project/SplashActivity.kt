@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 class SplashActivity : AppCompatActivity() {
     lateinit var binding: ActivitySplashBinding
     private lateinit var database: MyAppDatabase
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.a23_mju_mc_project.databinding.FragmentIntroBinding
 
-class FragmentIntro : Fragment() {
+class IntroFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

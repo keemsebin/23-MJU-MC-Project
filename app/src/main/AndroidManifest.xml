@@ -33,6 +33,15 @@
         <activity android:name=".OnBoardingActivity" >
 
         </activity>
+        <activity android:name=".CameraActivity" >
+
+        </activity>
+        <activity android:name=".WriteFragment" >
+
+        </activity>
+        <activity android:name=".MyFragment" >
+
+        </activity>
     </application>
 
 </manifest>

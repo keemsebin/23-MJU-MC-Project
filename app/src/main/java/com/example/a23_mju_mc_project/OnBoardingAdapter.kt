@@ -10,9 +10,9 @@ class OnBoardingAdapter (fgManager : FragmentManager, lifecycle: Lifecycle) :
     override fun getItemCount(): Int = 2
     override fun createFragment(position: Int): Fragment {
         when (position) {
-            0 -> return FragmentIntro()
-            1 -> return FragmentInput()
+            0 -> return IntroFragment()
+            1 -> return InputFragment()
         }
-        return FragmentIntro()
+        return IntroFragment()
     }
 }
