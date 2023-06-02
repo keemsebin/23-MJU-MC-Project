@@ -27,7 +27,7 @@ class FragmentInput: Fragment() {
         binding = FragmentInputBinding.inflate(inflater,container,false)
         database = MyAppDatabase.getDatabase(requireContext())
 
-        printUserTableData() //로그캣에서 User table 데이터 확인 가능
+         //로그캣에서 User table 데이터 확인 가능
 
         binding.startBtn.setOnClickListener {
             val nickname = binding.nickname.text.toString()
@@ -39,6 +39,7 @@ class FragmentInput: Fragment() {
             // 백그라운드 스레드에서 데이터베이스 작업 수행
             GlobalScope.launch(Dispatchers.IO) {
                 database.userDao().insertUser(user)
+                printUserTableData()
             }
 
             Handler().postDelayed({

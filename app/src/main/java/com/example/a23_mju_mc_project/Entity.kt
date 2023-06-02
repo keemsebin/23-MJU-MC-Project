@@ -53,6 +53,9 @@ interface FeedDao {
 
     @Delete
     fun deleteFeed(feed: Feed)
+
+    @Query("DELETE FROM Feed")
+    fun deleteAllFeeds()
 }
 
 @Database(entities = [User::class, Feed::class], version = 1)
