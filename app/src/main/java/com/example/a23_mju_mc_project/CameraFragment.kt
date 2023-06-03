@@ -1,5 +1,8 @@
 package com.example.a23_mju_mc_project
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import WriteFragment
 import android.content.Intent
 import android.net.Uri
@@ -36,6 +39,7 @@ class CameraFragment : Fragment() {
     private var imageCapture: ImageCapture? = null
     private var isPreviewMode = true
     private var photoFilePath: String? = null
+    private val CAMERA_PERMISSION_REQUEST_CODE = 123
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,6 +50,16 @@ class CameraFragment : Fragment() {
         val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.navigationbar)
         toolbar.visibility = View.GONE
         bottomNavigationView.visibility = View.GONE
+
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            startCamera()
+        } else {
+            requestCameraPermission()
+        }
         return binding.root
     }
     override fun onSaveInstanceState(outState: Bundle) {
@@ -60,30 +74,20 @@ class CameraFragment : Fragment() {
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        startCamera() //이 함수가 카메라 Preview함수입니다.
+
         binding.cameraCaptureButton.setOnClickListener {
             if (isPreviewMode) {
-                takePhoto()
+                takePhoto() // 사진 촬영 함수입니다. 버튼 누르면 바로 촬영함
             } else {
-                showToast("Photo Saved")
-                // 이미지 파일 경로를 writefragment에 전달
-                val writeFragment = WriteFragment().apply {
-                    arguments = Bundle().apply {
-                        // 이미지 파일 경로를 WriteFragment에 전달
-                        putString("photoFilePath", photoFilePath)
-                    }
-                }
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.container, writeFragment)
-                    .commit()
             }
-            switchToSaveMode()
         }
-        startCamera()
     }
 
-    private fun takePhoto() {
-        val imageCapture = imageCapture ?: return
 
+
+    private fun takePhoto() { // 웬만하면 이 촬영함수는 이대로 고정시켜주시길 바랍니다 :)
+        val imageCapture = imageCapture ?: return
         val photoFile = File(
             outputDirectory,
             newJpgFileName()
@@ -97,22 +101,16 @@ class CameraFragment : Fragment() {
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    val msg = "Photo capture succeeded: $savedUri"
-                    showToast(msg)
-                    Log.d("CameraX-Debug", msg)
 
-                    val bundle = Bundle()
-                    bundle.putString("photoFilePath", photoFile.absolutePath)
-                    photoFilePath = photoFile.absolutePath
+                    val bundle = Bundle() // 이거 번들로 옮기는거 진짜 짱짱굿입니다
+                    bundle.putString("photoFilePath", savedUri.toString()) // 이미지 데이터 다른 프레그먼트로 옮길때, 꼭 이 savedUri로 옮겨주시길 바랍니다. 그래야 db에 byte_array로 저장되서리..
 
-                    val writeFragment = WriteFragment()
-                    writeFragment.arguments = bundle
+                    val checkCancelFragment = CheckCancelFragment()
+                    checkCancelFragment.arguments = bundle
 
-                    val transaction = parentFragmentManager.beginTransaction()
-                    transaction.replace(R.id.container, writeFragment)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
-
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.container, checkCancelFragment)
+                        .commit()
                 }
 
                 override fun onError(exc: ImageCaptureException) {
@@ -122,7 +120,7 @@ class CameraFragment : Fragment() {
         )
     }
 
-    private fun startCamera() {
+    private fun startCamera() { //카메라 프리뷰 함수
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
@@ -164,21 +162,52 @@ class CameraFragment : Fragment() {
         return mediaDir ?: requireContext().filesDir
     }
 
-    private fun showToast(message: String) {
+    private fun showToast(message: String) { //이거 사진 저장하면 저장 됐다고 토스트 띄우는건데 일단 버리지 말아주세용
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
     }
-    private fun switchToSaveMode() {
-        binding.cameraCaptureButton.setImageResource(R.drawable.check)
-        binding.cameraRefreshButton.setImageResource(R.drawable.cancel)
-        isPreviewMode = false
-    }
     override fun onDestroyView() {
         super.onDestroyView()
         cameraExecutor.shutdown()
     }
 
+    private fun requestCameraPermission() {  //카메라 권한 요청 팝업창
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                requireActivity(),
+                Manifest.permission.CAMERA
+            )
+        ) {
+            // 권한 요청을 표시
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.CAMERA),
+                CAMERA_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            // 권한 요청을 표시하지 않고 바로 권한 요청.
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.CAMERA),
+                CAMERA_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCamera()
+            } else {
+            }
+        }
+    }
 }
