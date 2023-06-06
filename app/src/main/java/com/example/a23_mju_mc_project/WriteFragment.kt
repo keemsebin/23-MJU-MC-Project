@@ -13,10 +13,13 @@ import androidx.lifecycle.lifecycleScope
 import com.example.a23_mju_mc_project.AppDatabase
 import com.example.a23_mju_mc_project.Feed
 import com.example.a23_mju_mc_project.MyAppDatabase
+import com.example.a23_mju_mc_project.R
 import com.example.a23_mju_mc_project.databinding.FragmentWriteBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 class WriteFragment : Fragment() {
@@ -24,7 +27,20 @@ class WriteFragment : Fragment() {
     private lateinit var nickname: String
     private lateinit var savedUri: String
     private lateinit var database: MyAppDatabase
+    @RequiresApi(Build.VERSION_CODES.O)
+    val currentTime = LocalTime.now()
+    @RequiresApi(Build.VERSION_CODES.O)
+    val currentDate = LocalDate.now()
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
+    @RequiresApi(Build.VERSION_CODES.O)
+    val dateFormat = DateTimeFormatter.ofPattern("M/d")
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val formattedTime = currentTime.format(timeFormat)
+    @RequiresApi(Build.VERSION_CODES.O)
+    val formattedDate = currentDate.format(dateFormat)
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,8 +69,11 @@ class WriteFragment : Fragment() {
             }
         }
 
-        binding.saveButton.setOnClickListener {
-            val feedText = binding.feedEditText.text.toString()
+        binding.writeDate.text = formattedDate
+        binding.writeTime.text = formattedTime
+
+        binding.saveBtn.setOnClickListener {
+            val feedText = binding.writeComment.text.toString()
             if (feedText.isNotEmpty()) {
                 val currentDateTime = LocalDateTime.now()
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -65,8 +84,8 @@ class WriteFragment : Fragment() {
                     upload_Date = formattedDate,
                     feed_Text = feedText
                 )
-                binding.uploadDateTextView.text = "Upload Date: $formattedDate"
-                saveFeed(feed)
+//                binding.uploadDateTextView.text = "Upload Date: $formattedDate"
+//                saveFeed(feed)
                 requireActivity().supportFragmentManager.popBackStack()
             } else {
                 Toast.makeText(requireContext(), "Feed text is empty", Toast.LENGTH_SHORT).show()
@@ -114,4 +133,5 @@ class WriteFragment : Fragment() {
             }
         }
     }
+
 }

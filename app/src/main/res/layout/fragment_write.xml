@@ -2,29 +2,116 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="300sp" />
-
+    android:orientation="vertical"
+    android:layout_margin="10sp">
     <TextView
-        android:id="@+id/uploadDateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title" />
-
-    <EditText
-        android:id="@+id/feedEditText"
+        android:id="@+id/writeTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter your feed text..." />
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
+        android:text="기록하기"
+        android:textSize="20sp"
+        android:layout_margin="10sp"
+        android:fontFamily="@font/pretendard_semibold"
+        />
+    <View
+        android:layout_width="370sp"
+        android:layout_gravity="center"
+        android:layout_height="2px"
+        android:background="@color/black"/>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save" />
-
+        android:layout_margin="5sp"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="230sp"
+            android:layout_height="200sp"
+            android:background="@drawable/imageround"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/today"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_margin="15sp"
+                android:fontFamily="@font/pretendard_bold"
+                android:textColor="@color/black"
+                android:text="오늘 날짜" />
+            <TextView
+                android:id="@+id/writeDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_margin="5sp"
+                android:fontFamily="@font/pretendard_medium"
+                android:textColor="@color/gray"
+                android:text="@string/writeDate" />
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15sp"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="기록 시간" />
+            <TextView
+                android:id="@+id/writeTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5sp"
+                android:textSize="20sp"
+                android:fontFamily="@font/pretendard_medium"
+                android:textColor="@color/gray"
+                android:text="@string/writeTime"/>
+        </LinearLayout>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="20sp"
+        >
+        <ImageView
+            android:layout_width="350sp"
+            android:layout_height="160sp"
+            android:src="@drawable/todaysentence" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘의 한마디"
+            android:textSize="20sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="10sp"
+            android:layout_marginLeft="20sp" />
+        <EditText
+            android:id="@+id/writeComment"
+            android:layout_width="320sp"
+            android:layout_height="120sp"
+            android:layout_marginTop="33sp"
+            android:textColor="#949494"
+            android:background="@android:color/transparent"
+            android:layout_marginLeft="20sp"
+            android:maxLines="3"
+            android:ems="9"/>
+    </FrameLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/saveBtn"
+        android:layout_width="350sp"
+        android:layout_height="50sp"
+        android:layout_gravity="center"
+        android:textSize="17sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/pretendard_bold"
+        android:background="@drawable/save_button_custom"
+        android:text="저장"
+        />
 </LinearLayout>

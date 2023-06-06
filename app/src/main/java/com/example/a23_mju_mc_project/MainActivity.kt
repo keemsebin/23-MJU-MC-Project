@@ -1,5 +1,6 @@
 package com.example.a23_mju_mc_project
 
+import WriteFragment
 import android.content.Intent
 
 import android.os.Bundle
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment();
     private val myFragment = MyFragment();
     private val cameraFragment = CameraFragment();
+    private val writeFragment = WriteFragment();
     lateinit var binding : ActivityMainBinding
     lateinit var bottomNavigationView: BottomNavigationView
     private var backPressedTime: Long = 0
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.camera -> {
-                    fragmentTransaction.replace(R.id.container,cameraFragment).commit()
+                    fragmentTransaction.replace(R.id.container,writeFragment).commit()
                     true
                 }
                 R.id.My -> {

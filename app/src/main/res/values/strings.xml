@@ -3,6 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="introText">Miracle\nMorning은\n알람 서비스를 \n제공합니다. </string>
     <string name="nicknamehint">ex) 김세빈</string>
+    <string name="writeDate"></string>
+    <string name="writeTime"></string>
     <style name="CalendarStyle" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/pretendard_semibold</item>

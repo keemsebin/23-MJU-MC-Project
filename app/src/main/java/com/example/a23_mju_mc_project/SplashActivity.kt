@@ -28,14 +28,14 @@ class SplashActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
             val users = database.userDao().getAllUsers()
             if (users.isNotEmpty()) {
-                delay(2000)
+                delay(1000)
                 startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                 finish()
             } else {
                 Handler(Looper.getMainLooper()).postDelayed({
                     startActivity(Intent(this@SplashActivity, OnBoardingActivity::class.java))
                     finish()
-                }, 2000)
+                }, 1000)
             }
         }
     }
