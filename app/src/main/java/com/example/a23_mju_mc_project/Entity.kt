@@ -14,8 +14,9 @@ data class User(
 data class Feed(
     @PrimaryKey(autoGenerate = true) val feed_Id: Int = 0,
     @ColumnInfo(name = "Nickname") val nickname: String,
-    @ColumnInfo(name = "Picture") val picture: ByteArray,
+    @ColumnInfo(name = "Picture") val picture: String,
     @ColumnInfo(name = "upload_Date") val upload_Date: String,
+    @ColumnInfo(name = "upload_Time") val upload_Time: String,
     @ColumnInfo(name = "feed_Text") val feed_Text: String
 )
 

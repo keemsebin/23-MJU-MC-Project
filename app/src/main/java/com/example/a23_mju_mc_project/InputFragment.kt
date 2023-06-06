@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.a23_mju_mc_project.databinding.FragmentInputBinding
 import kotlinx.coroutines.Dispatchers
@@ -38,22 +39,27 @@ class InputFragment: Fragment() {
             val timer = binding.timer.text.toString()
             val todayComment = binding.todayComment.text.toString()
 
-            val user = User(nickname = nickname, alarm_Time = timer, push_Mes = todayComment)
+            if (nickname.isBlank() || timer.isBlank() || todayComment.isBlank()) {
+                // 필수 입력 필드가 비어있을 때 Toast 메시지 표시
+                Toast.makeText(requireContext(), "입력 창을 모두 채워주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                val user = User(nickname = nickname, alarm_Time = timer, push_Mes = todayComment)
 
-            // 백그라운드 스레드에서 데이터베이스 작업 수행
-            GlobalScope.launch(Dispatchers.IO) {
-                database.userDao().insertUser(user)
-                printUserTableData()  //로그캣에서 User table 데이터 확인 가능
-                val users = withContext(Dispatchers.IO) {
-                    database.userDao().getAllUsers()
+                // 백그라운드 스레드에서 데이터베이스 작업 수행
+                GlobalScope.launch(Dispatchers.IO) {
+                    database.userDao().insertUser(user)
+                    printUserTableData()  //로그캣에서 User table 데이터 확인 가능
+                    val users = withContext(Dispatchers.IO) {
+                        database.userDao().getAllUsers()
+                    }
+                    setAlarm(users[0].alarm_Time, users[0].push_Mes)
                 }
-                setAlarm(users[0].alarm_Time, users[0].push_Mes)
-            }
 
-            Handler().postDelayed({
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                startActivity(intent)
-            }, 1000)
+                Handler().postDelayed({
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                }, 1000)
+            }
         }
 
         binding.timer.setOnClickListener{

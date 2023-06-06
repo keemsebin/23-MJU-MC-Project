@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.camera -> {
-                    fragmentTransaction.replace(R.id.container,writeFragment).commit()
+                    fragmentTransaction.replace(R.id.container,cameraFragment).commit()
                     true
                 }
                 R.id.My -> {
@@ -56,15 +56,48 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() { //각 프레그먼트에서 디바이스 뒤로가기 버튼을 눌렀을 시
+        // 현재 보여지는 프래그먼트를 가져옵니다.
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.container)
 
-    @Suppress("DEPRECATION")
-    //메인화면에서 뒤로가기 버튼 두번 누르면 앱 종료
-    override fun onBackPressed() {
-        if (backPressedTime + BACK_PRESSED_INTERVAL > System.currentTimeMillis()) {
-            super.onBackPressed() // 앱 종료
-        } else {
-            Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+        if (currentFragment is CameraFragment) { //메인화면으로
+            val toolbar = findViewById<Toolbar>(R.id.toolbarLayout)
+            val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigationbar)
+            fragmentManager.beginTransaction().replace(binding.container.id, homeFragment).commit()
+            toolbar.visibility = View.VISIBLE
+            bottomNavigationView.visibility = View.VISIBLE
         }
-        backPressedTime = System.currentTimeMillis()
+        else if (currentFragment is MyFragment) { //메인화면으로
+            val toolbar = findViewById<Toolbar>(R.id.toolbarLayout)
+            val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigationbar)
+            fragmentManager.beginTransaction().replace(binding.container.id, homeFragment).commit()
+            toolbar.visibility = View.VISIBLE
+            bottomNavigationView.visibility = View.VISIBLE
+        }
+        else if (currentFragment is WriteFragment) { //카메라화면으로
+            val cameraFragment = CameraFragment()
+            val fragmentManager = supportFragmentManager
+
+            fragmentManager.beginTransaction()
+                .replace(R.id.container, cameraFragment)
+                .commit()
+        }
+        else if (currentFragment is CheckCancelFragment) { //카메라화면으로
+            val cameraFragment = CameraFragment()
+            val fragmentManager = supportFragmentManager
+
+            fragmentManager.beginTransaction()
+                .replace(R.id.container, cameraFragment)
+                .commit()
+        }
+        else { // 메인화면에서 뒤로가기 두번 누르면 앱 종료
+            // 뒤로가기 버튼을 누른 시간과 현재 시간을 비교하여 2초 이내에 다시 누르면 앱 종료
+            if (System.currentTimeMillis() - backPressedTime < BACK_PRESSED_INTERVAL) {
+                super.onBackPressed() // 기본 동작인 액티비티 종료 호출
+            } else {
+                backPressedTime = System.currentTimeMillis()
+                Toast.makeText(this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

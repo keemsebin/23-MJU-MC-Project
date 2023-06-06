@@ -1,4 +1,3 @@
-import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -10,10 +9,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.example.a23_mju_mc_project.AppDatabase
 import com.example.a23_mju_mc_project.Feed
 import com.example.a23_mju_mc_project.MyAppDatabase
-import com.example.a23_mju_mc_project.R
 import com.example.a23_mju_mc_project.databinding.FragmentWriteBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -80,12 +77,13 @@ class WriteFragment : Fragment() {
                 val formattedDate = currentDateTime.format(formatter)
                 val feed = Feed(
                     nickname = nickname,
-                    picture = savedUri.toByteArray(),
+                    picture = savedUri,
                     upload_Date = formattedDate,
+                    upload_Time = formattedTime,
                     feed_Text = feedText
                 )
-//                binding.uploadDateTextView.text = "Upload Date: $formattedDate"
-//                saveFeed(feed)
+
+                saveFeed(feed)
                 requireActivity().supportFragmentManager.popBackStack()
             } else {
                 Toast.makeText(requireContext(), "Feed text is empty", Toast.LENGTH_SHORT).show()
