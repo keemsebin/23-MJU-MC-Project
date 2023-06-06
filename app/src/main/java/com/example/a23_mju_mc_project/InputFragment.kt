@@ -1,6 +1,9 @@
 package com.example.a23_mju_mc_project
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +16,7 @@ import com.example.a23_mju_mc_project.databinding.FragmentInputBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 
@@ -27,7 +31,7 @@ class InputFragment: Fragment() {
         binding = FragmentInputBinding.inflate(inflater,container,false)
         database = MyAppDatabase.getDatabase(requireContext())
 
-         //로그캣에서 User table 데이터 확인 가능
+
 
         binding.startBtn.setOnClickListener {
             val nickname = binding.nickname.text.toString()
@@ -39,7 +43,11 @@ class InputFragment: Fragment() {
             // 백그라운드 스레드에서 데이터베이스 작업 수행
             GlobalScope.launch(Dispatchers.IO) {
                 database.userDao().insertUser(user)
-                printUserTableData()
+                printUserTableData()  //로그캣에서 User table 데이터 확인 가능
+                val users = withContext(Dispatchers.IO) {
+                    database.userDao().getAllUsers()
+                }
+                setAlarm(users[0].alarm_Time, users[0].push_Mes)
             }
 
             Handler().postDelayed({
@@ -70,5 +78,33 @@ class InputFragment: Fragment() {
                 Log.d("UserTable", "User ID: ${user.user_Id}, Nickname: ${user.nickname}, Alarm Time: ${user.alarm_Time}, Push Message: ${user.push_Mes}")
             }
         }
+    }
+
+    //AlarmReceiver에 User table의 알람시간, 푸시메세지 전달
+    private fun setAlarm(alarmTime: String, pushMessage: String) {
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // Parse alarmTime to hour and minute
+        val timeParts = alarmTime.split(":")
+        val hourOfDay = timeParts[0].toInt()
+        val minute = timeParts[1].toInt()
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, 0)
+
+        // Check if the alarm time has already passed for today
+        val currentTime = Calendar.getInstance()
+        if (calendar.before(currentTime)) {
+            // Add a day to the alarm time to set it for tomorrow
+            calendar.add(Calendar.DATE, 1)
+        }
+
+        val intent = Intent(requireContext(), AlarmReceiver::class.java)
+        intent.putExtra("pushMessage", pushMessage)
+        val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        // Set the alarm
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
 }

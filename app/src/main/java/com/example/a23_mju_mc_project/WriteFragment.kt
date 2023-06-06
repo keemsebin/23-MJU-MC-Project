@@ -1,47 +1,137 @@
-import android.graphics.BitmapFactory
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.example.a23_mju_mc_project.MainActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.a23_mju_mc_project.AppDatabase
+import com.example.a23_mju_mc_project.Feed
+import com.example.a23_mju_mc_project.MyAppDatabase
 import com.example.a23_mju_mc_project.R
 import com.example.a23_mju_mc_project.databinding.FragmentWriteBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.io.File
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class WriteFragment : Fragment() {
     private lateinit var binding: FragmentWriteBinding
+    private lateinit var nickname: String
+    private lateinit var savedUri: String
+    private lateinit var database: MyAppDatabase
+    @RequiresApi(Build.VERSION_CODES.O)
+    val currentTime = LocalTime.now()
+    @RequiresApi(Build.VERSION_CODES.O)
+    val currentDate = LocalDate.now()
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
+    @RequiresApi(Build.VERSION_CODES.O)
+    val dateFormat = DateTimeFormatter.ofPattern("M/d")
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val formattedTime = currentTime.format(timeFormat)
+    @RequiresApi(Build.VERSION_CODES.O)
+    val formattedDate = currentDate.format(dateFormat)
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentWriteBinding.inflate(inflater, container, false)
-        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbarLayout)
-        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.navigationbar)
-        toolbar.visibility = View.VISIBLE
-        bottomNavigationView.visibility = View.VISIBLE
-
+        database = MyAppDatabase.getDatabase(requireContext().applicationContext)
         return binding.root
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 전달된 데이터 받기
-        val photoFilePath = arguments?.getString("photoFilePath")
+        lifecycleScope.launch(Dispatchers.IO) {
+            val users = database.userDao().getAllUsers()
+            nickname = users[0].nickname
+            savedUri = arguments?.getString("photoFilePath").orEmpty()
 
-        // photoFilePath를 사용하여 필요한 작업 수행
-        if (photoFilePath != null) {
-            // 이미지 파일 경로를 사용하여 이미지를 로드하거나 다른 작업을 수행할 수 있습니다.
-            val imageFile = File(photoFilePath)
-            val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+            requireActivity().runOnUiThread {
+                if (savedUri.isNotEmpty()) {
+                    val photoUri = Uri.parse(savedUri)
+                    binding.imageView.setImageURI(photoUri)
+                }
+            }
+        }
 
-            // 예시: 이미지를 ImageView에 설정
-            binding.imageView.setImageBitmap(bitmap)
+        binding.writeDate.text = formattedDate
+        binding.writeTime.text = formattedTime
+
+        binding.saveBtn.setOnClickListener {
+            val feedText = binding.writeComment.text.toString()
+            if (feedText.isNotEmpty()) {
+                val currentDateTime = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                val formattedDate = currentDateTime.format(formatter)
+                val feed = Feed(
+                    nickname = nickname,
+                    picture = savedUri.toByteArray(),
+                    upload_Date = formattedDate,
+                    feed_Text = feedText
+                )
+//                binding.uploadDateTextView.text = "Upload Date: $formattedDate"
+//                saveFeed(feed)
+                requireActivity().supportFragmentManager.popBackStack()
+            } else {
+                Toast.makeText(requireContext(), "Feed text is empty", Toast.LENGTH_SHORT).show()
+            }
         }
     }
+
+    private fun saveFeed(feed: Feed) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val db = MyAppDatabase.getDatabase(requireContext().applicationContext)
+                db.feedDao().insertFeed(feed)
+
+                Log.d("WriteFragment", "Feed saved: $feed")
+                printAllFeeds() //Feed table 데이터 확인 가능
+                requireActivity().runOnUiThread {
+                    Toast.makeText(
+                        requireContext(),
+                        "Feed saved successfully.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    // Additional operations
+                }
+            } catch (e: Exception) {
+                Log.e("WriteFragment", "Error saving feed: ${e.message}")
+                requireActivity().runOnUiThread {
+                    Toast.makeText(
+                        requireContext(),
+                        "An error occurred while saving the feed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
+    private fun printAllFeeds() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val db = MyAppDatabase.getDatabase(requireContext().applicationContext)
+            val feedList = db.feedDao().getAllFeeds()
+            if (feedList != null) {
+                for (feed in feedList) {
+                    Log.d("WriteFragment", "Feed: $feed")
+                }
+            }
+        }
+    }
+
+}
