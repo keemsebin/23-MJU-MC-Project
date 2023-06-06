@@ -23,8 +23,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val notificationId = 1
 
         val notificationIntent = Intent(context, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
+        val pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_notification) //이거 푸시 메세지 아이콘인데, 깔쌈한거 하나 부탁드려요 세빈님 :)
             .setContentTitle("MiMo")

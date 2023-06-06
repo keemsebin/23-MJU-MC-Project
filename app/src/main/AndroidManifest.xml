@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
-
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -35,12 +35,7 @@
         <activity android:name=".OnBoardingActivity" >
 
         </activity>
-        <activity android:name=".CameraActivity" >
 
-        </activity>
-        <activity android:name=".WriteFragment" >
-
-        </activity>
         <activity android:name=".MyFragment" >
 
         </activity>

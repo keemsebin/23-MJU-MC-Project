@@ -103,8 +103,7 @@ class InputFragment: Fragment() {
 
         val intent = Intent(requireContext(), AlarmReceiver::class.java)
         intent.putExtra("pushMessage", pushMessage)
-        val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
+        val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
         // Set the alarm
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
