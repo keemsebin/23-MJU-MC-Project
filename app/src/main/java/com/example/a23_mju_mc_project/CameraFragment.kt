@@ -40,6 +40,7 @@ class CameraFragment : Fragment() {
     private var isPreviewMode = true
     private var photoFilePath: String? = null
     private val CAMERA_PERMISSION_REQUEST_CODE = 123
+    private var currentCamera = CameraSelector.DEFAULT_BACK_CAMERA
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -74,19 +75,30 @@ class CameraFragment : Fragment() {
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        startCamera() //이 함수가 카메라 Preview함수입니다.
+        startCamera()
 
         binding.cameraCaptureButton.setOnClickListener {
             if (isPreviewMode) {
-                takePhoto() // 사진 촬영 함수입니다. 버튼 누르면 바로 촬영함
+                takePhoto()
             } else {
             }
+        }
+
+        binding.cameraRefreshButton.setOnClickListener {
+            val newCamera = if (currentCamera == CameraSelector.DEFAULT_BACK_CAMERA) {
+                CameraSelector.DEFAULT_FRONT_CAMERA
+            } else {
+                CameraSelector.DEFAULT_BACK_CAMERA
+            }
+
+            currentCamera = newCamera
+            startCamera()
         }
     }
 
 
 
-    private fun takePhoto() { // 웬만하면 이 촬영함수는 이대로 고정시켜주시길 바랍니다 :)
+    private fun takePhoto() {
         val imageCapture = imageCapture ?: return
         val photoFile = File(
             outputDirectory,
@@ -102,15 +114,17 @@ class CameraFragment : Fragment() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
 
-                    val bundle = Bundle() // 이거 번들로 옮기는거 진짜 짱짱굿입니다
-                    bundle.putString("photoFilePath", savedUri.toString()) // 이미지 데이터 다른 프레그먼트로 옮길때, 꼭 이 savedUri로 옮겨주시길 바랍니다. 그래야 db에 byte_array로 저장되서리..
+                    val bundle = Bundle()
+                    bundle.putString("photoFilePath", savedUri.toString())
 
                     val checkCancelFragment = CheckCancelFragment()
                     checkCancelFragment.arguments = bundle
 
+
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.container, checkCancelFragment)
                         .commit()
+
                 }
 
                 override fun onError(exc: ImageCaptureException) {
@@ -120,7 +134,7 @@ class CameraFragment : Fragment() {
         )
     }
 
-    private fun startCamera() { //카메라 프리뷰 함수
+    private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
@@ -132,13 +146,11 @@ class CameraFragment : Fragment() {
 
             imageCapture = ImageCapture.Builder().build()
 
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     viewLifecycleOwner,
-                    cameraSelector,
+                    currentCamera, // Use the currentCamera variable here
                     preview,
                     imageCapture
                 )
