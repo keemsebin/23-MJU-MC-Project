@@ -5,14 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.a23_mju_mc_project.databinding.FragmentMyBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class MyFragment : Fragment() {
     private lateinit var binding: FragmentMyBinding
@@ -30,7 +33,18 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        feedAdapter = FeedAdapter(listOf())
+        feedAdapter = FeedAdapter(listOf(), object : FeedAdapter.OnFeedClickListener {
+            override fun onFeedClick(feed: Feed) {
+                // Here, handle the click event. For example, navigate to a new fragment with the clicked feed.
+                val feedDetailFragment = FeedDetailFragment()
+                feedDetailFragment.arguments = bundleOf("feed_id" to feed.feed_Id)
+
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.container, feedDetailFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        })
         binding.recyclerView.adapter = feedAdapter
         binding.recyclerView.layoutManager = GridLayoutManager(context, 3)
 

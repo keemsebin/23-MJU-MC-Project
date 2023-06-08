@@ -12,7 +12,8 @@ import com.example.a23_mju_mc_project.databinding.FeedItemBinding
 import java.lang.System.load
 
 class FeedAdapter(
-    var feedItems: List<Feed>
+    var feedItems: List<Feed>,
+    private val onFeedClickListener: OnFeedClickListener
 ) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
     inner class FeedViewHolder(val binding: FeedItemBinding) : RecyclerView.ViewHolder(binding.root)
     override fun getItemCount(): Int = feedItems.size
@@ -27,8 +28,13 @@ class FeedAdapter(
         Glide.with(holder.binding.feedImage.context)
             .load(item.picture)
             .into(holder.binding.feedImage)
+        holder.binding.feedImage.setOnClickListener {
+            onFeedClickListener.onFeedClick(item)
+        }
 
-
+    }
+    interface OnFeedClickListener {
+        fun onFeedClick(feed: Feed)
     }
 }
 
