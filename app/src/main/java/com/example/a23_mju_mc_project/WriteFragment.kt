@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.a23_mju_mc_project.Feed
 import com.example.a23_mju_mc_project.MyAppDatabase
+import com.example.a23_mju_mc_project.R
 import com.example.a23_mju_mc_project.databinding.FragmentWriteBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -46,6 +49,10 @@ class WriteFragment : Fragment() {
     ): View {
         binding = FragmentWriteBinding.inflate(inflater, container, false)
         database = MyAppDatabase.getDatabase(requireContext().applicationContext)
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbarLayout)
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.navigationbar)
+        toolbar.visibility = View.VISIBLE
+        bottomNavigationView.visibility = View.VISIBLE
         return binding.root
     }
 
