@@ -31,11 +31,6 @@ class HomeFragment : Fragment() {
         calendar = binding.calendar
         calendar.setSelectedDate(CalendarDay.today())
         calendar.addDecorator(TodayDecorator())
-        calendar.setOnDateChangedListener { widget, date, selected ->
-            calendar.addDecorator(
-                EventDecorator(Collections.singleton(date))
-            )
-        }
 
         // 닉네임에 따라 프레그먼트 상단 문장 달라짐.
         val userDao = MyAppDatabase.getDatabase(requireContext()).userDao()
