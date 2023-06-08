@@ -4,7 +4,10 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import WriteFragment
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -34,7 +37,6 @@ import java.util.concurrent.Executors
 class CameraFragment : Fragment() {
     private lateinit var binding: FragmentCameraBinding
     private lateinit var outputDirectory: File
-    private lateinit var previewView: PreviewView
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
     private var isPreviewMode = true
@@ -119,7 +121,6 @@ class CameraFragment : Fragment() {
 
                     val checkCancelFragment = CheckCancelFragment()
                     checkCancelFragment.arguments = bundle
-
 
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.container, checkCancelFragment)
