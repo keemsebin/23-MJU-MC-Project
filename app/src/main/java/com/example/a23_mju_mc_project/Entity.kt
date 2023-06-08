@@ -1,5 +1,6 @@
 package com.example.a23_mju_mc_project
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Entity(tableName = "User", indices = [Index(value = ["Nickname"], unique = true)])
@@ -44,7 +45,7 @@ interface FeedDao {
     fun getAllFeeds(): List<Feed>
 
     @Query("SELECT * FROM Feed WHERE feed_Id = :feedId")
-    fun getFeedById(feedId: Int): Feed
+    fun getFeedById(feedId: Int): LiveData<Feed>
 
     @Query("SELECT * FROM Feed WHERE Nickname = :nickname")
     fun getFeedsByNickname(nickname: String): List<Feed>
