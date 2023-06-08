@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.a23_mju_mc_project.databinding.FeedItemBinding
 
-class FeedAdapter(private val feedList: List<Feed>) :
-    RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
+class FeedAdapter(
+    var feedItems: List<Feed>
+) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
 
     inner class FeedViewHolder(val binding: FeedItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -18,11 +20,12 @@ class FeedAdapter(private val feedList: List<Feed>) :
         return FeedViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = feedList.size
-
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        val feed = feedList[position]
-        val bitmap = BitmapFactory.decodeByteArray(feed.picture, 0, feed.picture.size)
-        holder.binding.feedImage.setImageBitmap(bitmap)
+        val item = feedItems[position]
+        Glide.with(holder.binding.feedImage.context).load(item.picture).into(holder.binding.feedImage)
     }
+
+    override fun getItemCount(): Int = feedItems.size
 }
+
+
