@@ -25,6 +25,7 @@ class CheckCancelFragment: Fragment() {
         val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.navigationbar)
         toolbar.visibility = View.GONE
         bottomNavigationView.visibility = View.GONE
+
         return binding.root
     }
 
