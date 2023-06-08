@@ -38,9 +38,15 @@ class MyFragment : Fragment() {
             val db = MyAppDatabase.getDatabase(requireContext())
             val feeds = db.feedDao().getAllFeeds()
 
+            val currentUser = db.userDao().getAllUsers().firstOrNull()
             withContext(Dispatchers.Main) {
                 feedAdapter.feedItems = feeds
                 feedAdapter.notifyDataSetChanged()
+
+                currentUser?.let { user ->
+                    binding.userName.text = user.nickname
+                    binding.userTime.text = user.alarm_Time
+                }
             }
         }
     }
