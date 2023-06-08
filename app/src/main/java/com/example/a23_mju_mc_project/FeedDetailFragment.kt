@@ -9,13 +9,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.a23_mju_mc_project.databinding.FragmentDetailBinding
 import com.example.a23_mju_mc_project.databinding.FragmentFeedDetailBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class FeedDetailFragment : Fragment() {
-    private lateinit var binding: FragmentFeedDetailBinding
+    private lateinit var binding: FragmentDetailBinding
     private lateinit var viewModel: FeedDetailViewModel
 
     override fun onCreateView(
@@ -23,7 +24,7 @@ class FeedDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFeedDetailBinding.inflate(inflater, container, false)
+        binding = FragmentDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -37,10 +38,10 @@ class FeedDetailFragment : Fragment() {
         viewModel.getFeedById(feedId).observe(viewLifecycleOwner, Observer { feed ->
             Glide.with(this)
                 .load(feed.picture)
-                .into(binding.feedPicture)
-            binding.feedUploadDate.text = feed.upload_Date
-            binding.feedUploadTime.text = feed.upload_Time
-            binding.feedText.text = feed.feed_Text
+                .into(binding.imageView)
+            binding.today.text = feed.upload_Date
+            binding.time.text = feed.upload_Time
+            binding.Comment.text = feed.feed_Text
         })
     }
 }
