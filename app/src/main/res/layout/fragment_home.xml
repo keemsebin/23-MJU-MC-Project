@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,19 +10,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="23sp"
         android:layout_marginTop="29sp"
         android:layout_marginLeft="35sp"
         android:fontFamily="@font/pretendard_semibold"
         android:text="김세빈님, 하루를 기록해보세요."
         />
     <FrameLayout
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
-        android:radius="18dp"
-        >
+        android:layout_marginTop="15sp"
+        android:layout_gravity="center"
+        android:radius="18dp">
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
