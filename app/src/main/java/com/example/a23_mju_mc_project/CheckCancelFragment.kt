@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.a23_mju_mc_project.databinding.FragmentCheckcancelBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.io.File
 import java.util.concurrent.Executors
 
 class CheckCancelFragment: Fragment() {
@@ -35,7 +36,8 @@ class CheckCancelFragment: Fragment() {
 
         requireActivity().runOnUiThread {
             if (savedUri.isNotEmpty()) {
-                val photoUri = Uri.parse(savedUri)
+                val photoFile = File(savedUri)
+                val photoUri = Uri.fromFile(photoFile)
                 binding.imageView.setImageURI(photoUri)
             }
         }

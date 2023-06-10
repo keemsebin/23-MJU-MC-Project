@@ -90,6 +90,14 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, cameraFragment)
                 .commit()
         }
+        else if (currentFragment is FeedDetailFragment) { //카메라화면으로
+            val myFragment = MyFragment()
+            val fragmentManager = supportFragmentManager
+
+            fragmentManager.beginTransaction()
+                .replace(R.id.container, myFragment)
+                .commit()
+        }
         else { // 메인화면에서 뒤로가기 두번 누르면 앱 종료
             // 뒤로가기 버튼을 누른 시간과 현재 시간을 비교하여 2초 이내에 다시 누르면 앱 종료
             if (System.currentTimeMillis() - backPressedTime < BACK_PRESSED_INTERVAL) {

@@ -6,8 +6,13 @@ import androidx.core.app.ActivityCompat
 import WriteFragment
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -23,14 +28,15 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.example.a23_mju_mc_project.databinding.FragmentCameraBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -97,12 +103,12 @@ class CameraFragment : Fragment() {
             startCamera()
         }
     }
+
+
+
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
-        val photoFile = File(
-            outputDirectory,
-            newJpgFileName()
-        )
+        val photoFile = File(outputDirectory, newJpgFileName())
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
@@ -113,8 +119,43 @@ class CameraFragment : Fragment() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
 
+                    val options = BitmapFactory.Options().apply {
+                        inMutable = true
+                    }
+                    val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath, options)
+
+                    val rotatedBitmap = rotate(bitmap, 90f)
+
+                    val backgroundBitmap = Bitmap.createBitmap(
+                        rotatedBitmap.width,
+                        rotatedBitmap.height,
+                        Bitmap.Config.ARGB_8888
+                    )
+                    val canvas = Canvas(backgroundBitmap)
+                    canvas.drawColor(Color.BLACK)
+
+                    val left = (backgroundBitmap.width - rotatedBitmap.width) / 2f
+                    val top = (backgroundBitmap.height - rotatedBitmap.height) / 2f
+                    canvas.drawBitmap(rotatedBitmap, left, top, null)
+
+                    val paint = Paint().apply {
+                        color = Color.WHITE
+                        textSize = 300f
+                        textAlign = Paint.Align.CENTER
+                        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                    }
+                    val currentTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis())
+                    val textX = backgroundBitmap.width / 2f
+                    val textY = (backgroundBitmap.height / 2f) - ((paint.descent() + paint.ascent()) / 2f)
+                    canvas.drawText(currentTime, textX, textY, paint)
+
+                    val modifiedPhotoFile = File(outputDirectory, newJpgFileName())
+                    val modifiedOutputStream = FileOutputStream(modifiedPhotoFile)
+                    backgroundBitmap.compress(Bitmap.CompressFormat.JPEG, 100, modifiedOutputStream)
+                    modifiedOutputStream.close()
+
                     val bundle = Bundle()
-                    bundle.putString("photoFilePath", savedUri.toString())
+                    bundle.putString("photoFilePath", modifiedPhotoFile.absolutePath)
 
                     val checkCancelFragment = CheckCancelFragment()
                     checkCancelFragment.arguments = bundle
@@ -125,15 +166,22 @@ class CameraFragment : Fragment() {
 
                 }
 
+
                 override fun onError(exc: ImageCaptureException) {
                     Log.d("CameraX-Debug", "Photo capture failed: ${exc.message}", exc)
                 }
             }
         )
     }
+    private fun rotate(bitmap: Bitmap, degree: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(degree)
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
 
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
@@ -172,13 +220,6 @@ class CameraFragment : Fragment() {
         return mediaDir ?: requireContext().filesDir
     }
 
-    private fun showToast(message: String) { //이거 사진 저장하면 저장 됐다고 토스트 띄우는건데 일단 버리지 말아주세용
-        lifecycleScope.launch {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
     override fun onDestroyView() {
         super.onDestroyView()
         cameraExecutor.shutdown()
