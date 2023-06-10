@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -60,6 +61,9 @@ class InputFragment: Fragment() {
                 Handler().postDelayed({
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     startActivity(intent)
+                    Handler(Looper.getMainLooper()).post {
+                        requireActivity().finish()
+                    }
                 }, 1000)
             }
         }
