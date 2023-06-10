@@ -1,9 +1,13 @@
-package com.example.a23_mju_mc_project
+package com.example.a23_mju_mc_project.Database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.a23_mju_mc_project.Feed
+import com.example.a23_mju_mc_project.FeedDao
+import com.example.a23_mju_mc_project.User
+import com.example.a23_mju_mc_project.UserDao
 
 @Database(entities = [User::class, Feed::class], version = 2)
 abstract class MyAppDatabase : RoomDatabase() {

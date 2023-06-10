@@ -1,6 +1,7 @@
 package com.example.a23_mju_mc_project
 
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
@@ -13,12 +14,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.a23_mju_mc_project.Database.MyAppDatabase
 import com.example.a23_mju_mc_project.databinding.FragmentInputBinding
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Calendar
+import java.util.*
 
 
 class InputFragment: Fragment() {
@@ -31,8 +35,6 @@ class InputFragment: Fragment() {
     ): View {
         binding = FragmentInputBinding.inflate(inflater,container,false)
         database = MyAppDatabase.getDatabase(requireContext())
-
-
 
         binding.startBtn.setOnClickListener {
             val nickname = binding.nickname.text.toString()
@@ -62,15 +64,22 @@ class InputFragment: Fragment() {
             }
         }
 
-        binding.timer.setOnClickListener{
+        binding.timer.setOnClickListener {
             val c: Calendar = Calendar.getInstance()
             val h: Int = c.get(Calendar.HOUR_OF_DAY)
             val m: Int = c.get(Calendar.MINUTE)
-            val timePickerDialog = TimePickerDialog(requireContext(),
-                { view, hourOfDay, minute ->
-                    binding.timer.setText("$hourOfDay"+":"+"$minute")
-                }, h, m, false
+
+            val timePickerDialog = TimePickerDialog(
+                requireContext(),
+                AlertDialog.THEME_HOLO_LIGHT,
+                { _, hourOfDay, minute ->
+                    val timeString =
+                        String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute)
+                    binding.timer.setText(timeString)
+                },
+                h, m, false
             )
+
             timePickerDialog.show()
         }
         return binding.root
