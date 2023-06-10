@@ -97,9 +97,6 @@ class CameraFragment : Fragment() {
             startCamera()
         }
     }
-
-
-
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
         val photoFile = File(

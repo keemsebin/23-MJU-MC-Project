@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.a23_mju_mc_project.Database.MyAppDatabase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,7 +19,6 @@ class FeedDetailViewModel(application: Application) : AndroidViewModel(applicati
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val naverApi: NaverApi = retrofit.create(NaverApi::class.java)
-
 
     fun getFeedById(feedId: Int): LiveData<Feed> {
         return db.feedDao().getFeedById(feedId)

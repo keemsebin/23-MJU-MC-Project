@@ -7,6 +7,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.a23_mju_mc_project.Database.MyAppDatabase
 import com.example.a23_mju_mc_project.databinding.ActivitySplashBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
