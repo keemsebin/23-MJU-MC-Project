@@ -11,20 +11,6 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-<!--        <androidx.viewpager2.widget.ViewPager2-->
-<!--            android:id="@+id/viewPager_onBoarding"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:clipChildren="false"-->
-<!--            android:clipToPadding="false"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/onboard_rectangle"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            android:padding="30dp"-->
-<!--            android:text="@string/introText"-->
-<!--            android:textSize="30sp"-->
-<!--            android:fontFamily="@font/pretendard_bold" />-->
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

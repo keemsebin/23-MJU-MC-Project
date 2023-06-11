@@ -13,25 +13,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="김세빈님"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:layout_margin="10sp"
-            android:fontFamily="@font/pretendard_semibold"
-            />
+            android:fontFamily="@font/pretendard_semibold" />
         <TextView
             android:id="@+id/userTime"
-            android:layout_width="wrap_content"
+            android:layout_width="40sp"
             android:layout_height="wrap_content"
             android:text="@string/userTime"
             android:textSize="15sp"
-            android:layout_margin="10sp"
-            android:fontFamily="@font/pretendard_semibold"
-            />
+            android:layout_marginTop="10sp"
+            android:fontFamily="@font/pretendard_semibold" />
     </LinearLayout>
     <View
-        android:layout_width="match_parent"
+        android:layout_width="380sp"
         android:layout_gravity="center"
         android:layout_height="2px"
-        android:background="@color/gray"/>
+        android:background="@color/grey"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

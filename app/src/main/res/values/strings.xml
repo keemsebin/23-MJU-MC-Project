@@ -5,7 +5,7 @@
     <string name="nicknamehint">ex) 김세빈</string>
     <string name="writeDate"></string>
     <string name="writeTime"></string>
-    <string name="userTime"> 06 : 00</string>
+    <string name="userTime"></string>
     <style name="CalendarStyle" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/pretendard_semibold</item>

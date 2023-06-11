@@ -27,6 +27,7 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.example.a23_mju_mc_project.databinding.FragmentCameraBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -138,15 +139,26 @@ class CameraFragment : Fragment() {
                     val top = (backgroundBitmap.height - rotatedBitmap.height) / 2f
                     canvas.drawBitmap(rotatedBitmap, left, top, null)
 
+                    val customTypeface =
+                        context?.let { ResourcesCompat.getFont(it, R.font.pretendard_bold) }
+                    val borderColor =
+                        context?.let { ContextCompat.getColor(it, R.color.grey2) }
+                    val borderWidth = 64f
+
                     val paint = Paint().apply {
                         color = Color.WHITE
-                        textSize = 300f
+                        textSize = 250f
                         textAlign = Paint.Align.CENTER
-                        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                        typeface = customTypeface
+                        isAntiAlias = true
+                        if (borderColor != null) {
+                            setShadowLayer(borderWidth, 0f, 0f, borderColor)
+                        }
                     }
                     val currentTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(System.currentTimeMillis())
                     val textX = backgroundBitmap.width / 2f
                     val textY = (backgroundBitmap.height / 2f) - ((paint.descent() + paint.ascent()) / 2f)
+
                     canvas.drawText(currentTime, textX, textY, paint)
 
                     val modifiedPhotoFile = File(outputDirectory, newJpgFileName())
