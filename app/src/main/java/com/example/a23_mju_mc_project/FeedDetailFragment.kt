@@ -69,7 +69,12 @@ class FeedDetailFragment : Fragment() {
                 Toast.makeText(context, "피드가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                 viewModel.deleteFeed(feed)
 
-                parentFragmentManager.popBackStack()
+                val myFragment = MyFragment()
+                val fragmentManager = requireActivity().supportFragmentManager
+
+                fragmentManager.beginTransaction()
+                    .replace(R.id.container, myFragment)
+                    .commit()
             }
 
 
