@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, cameraFragment)
                 .commit()
         }
-        else if (currentFragment is FeedDetailFragment) { //카메라화면으로
+        else if (currentFragment is FeedDetailFragment) { //홈화면으로
             val myFragment = MyFragment()
             val fragmentManager = supportFragmentManager
 
@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity() {
             // 뒤로가기 버튼을 누른 시간과 현재 시간을 비교하여 2초 이내에 다시 누르면 앱 종료
             if (System.currentTimeMillis() - backPressedTime < BACK_PRESSED_INTERVAL) {
                 super.onBackPressed() // 기본 동작인 액티비티 종료 호출
+                finish()
             } else {
                 backPressedTime = System.currentTimeMillis()
                 Toast.makeText(this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
