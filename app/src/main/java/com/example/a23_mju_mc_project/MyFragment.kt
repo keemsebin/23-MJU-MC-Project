@@ -38,7 +38,6 @@ class MyFragment : Fragment() {
 
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.container, feedDetailFragment)
-                    .addToBackStack(null)
                     .commit()
             }
         })

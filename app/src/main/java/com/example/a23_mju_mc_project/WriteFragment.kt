@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -99,6 +100,7 @@ class WriteFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun saveFeed(feed: Feed) {
         lifecycleScope.launch(Dispatchers.IO) {
             try {

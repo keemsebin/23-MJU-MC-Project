@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <!-- Candroid:layout_marginLeft="20sp"ustomize your theme here. -->
     </style>
     <style name="Theme.TitleBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">

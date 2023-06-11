@@ -99,9 +99,10 @@
             android:layout_width="320sp"
             android:layout_height="120sp"
             android:layout_marginTop="33sp"
+            android:layout_marginLeft="20sp"
+            android:inputType="text"
             android:textColor="#949494"
             android:background="@android:color/transparent"
-            android:layout_marginLeft="20sp"
             android:maxLines="3"
             android:maxLength="50"
             android:ems="9"/>
