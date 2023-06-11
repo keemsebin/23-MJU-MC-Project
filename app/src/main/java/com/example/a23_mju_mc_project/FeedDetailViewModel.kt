@@ -4,7 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.a23_mju_mc_project.Database.MyAppDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +26,14 @@ class FeedDetailViewModel(application: Application) : AndroidViewModel(applicati
     fun getFeedById(feedId: Int): LiveData<Feed> {
         return db.feedDao().getFeedById(feedId)
     }
+
+    fun deleteFeed(feed: Feed) {
+        // Deletes a feed in a non-blocking way
+        viewModelScope.launch(Dispatchers.IO) {
+            db.feedDao().deleteFeed(feed)
+        }
+    }
+
     fun analyzeSentiment(content: String): LiveData<String> {
         val result = MutableLiveData<String>()
 

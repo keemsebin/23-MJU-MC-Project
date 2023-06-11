@@ -131,6 +131,7 @@
                 android:layout_margin="5sp"
                 android:text="@string/writeTime"/>
             <ImageButton
+                android:id="@+id/delete_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
