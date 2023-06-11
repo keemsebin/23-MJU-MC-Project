@@ -33,7 +33,6 @@ class MyFragment : Fragment() {
 
         feedAdapter = FeedAdapter(listOf(), object : FeedAdapter.OnFeedClickListener {
             override fun onFeedClick(feed: Feed) {
-                // Here, handle the click event. For example, navigate to a new fragment with the clicked feed.
                 val feedDetailFragment = FeedDetailFragment()
                 feedDetailFragment.arguments = bundleOf("feed_id" to feed.feed_Id)
 

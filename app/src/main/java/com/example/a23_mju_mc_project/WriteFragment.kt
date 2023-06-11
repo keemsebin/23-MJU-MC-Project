@@ -107,13 +107,13 @@ class WriteFragment : Fragment() {
 
                 Log.d("WriteFragment", "Feed saved: $feed")
                 printAllFeeds() //Feed table 데이터 확인 가능
-                requireActivity().runOnUiThread {
+
+                lifecycleScope.launch(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(),
-                        "Feed saved successfully.",
+                        "저장되었습니다.",
                         Toast.LENGTH_SHORT
                     ).show()
-                    // Additional operations
                 }
 
                 val myFragment = MyFragment()
@@ -123,10 +123,10 @@ class WriteFragment : Fragment() {
 
             } catch (e: Exception) {
                 Log.e("WriteFragment", "Error saving feed: ${e.message}")
-                requireActivity().runOnUiThread {
+                lifecycleScope.launch(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(),
-                        "An error occurred while saving the feed.",
+                        "잠시 후 다시 이용해주세요..",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
