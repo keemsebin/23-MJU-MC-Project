@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, cameraFragment)
                 .commit()
         }
-        else if (currentFragment is FeedDetailFragment) { //홈화면으로
+        else if (currentFragment is FeedDetailFragment) { //피드화면으로
             val myFragment = MyFragment()
             val fragmentManager = supportFragmentManager
 
